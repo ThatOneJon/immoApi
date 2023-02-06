@@ -6,7 +6,8 @@ const listingSchema = new mongoose.Schema({
     price: {type:Number, required : true},
     city: {type: String},
     image:{type: String},
-    description: {type: String}
+    description: {type: String},
+    created:{type: String}
 })
 
 module.exports = mongoose.model("listing", listingSchema)

@@ -59,8 +59,8 @@ app.get("/api", (req, res) => {
 })
 //_____________REGISTER___________________________________
 app.post("/api/register", async (req, res) => {
-  const {email, last_name, first_name, password}= req.body
-  if(!(email && last_name && first_name && password)){
+  const {username, email, password}= req.body
+  if(!(username && email && password)){
     res.send("All input is required");
   }
     try{
@@ -77,8 +77,7 @@ app.post("/api/register", async (req, res) => {
   encryptedPassword = await bcrypt.hash(password, 10);
 
   const user = await User.create({
-    first_name,
-    last_name,
+    username: username,
     email: email.toLowerCase(),
     password: encryptedPassword
   })
@@ -96,12 +95,12 @@ app.post("/api/register", async (req, res) => {
 })
 // ____________LOGIN_____________________________
 app.post("/api/login", async (req, res, next) => {
-    const {email, password} = req.body
+    let {email, password} = req.body
     try{
       if(!(email && password)){
         return res.send("Email and password required!")
       }
-
+      email = email.toLowerCase()
       const user = await User.findOne({ email });
       if(user && bcrypt.compare(password, user.password)){
         const token = jwt.sign(
@@ -138,19 +137,28 @@ app.post("/api/login", async (req, res, next) => {
     .json({ message: "Successfully logged out!" });
   } )
 
-
-  app.get("/api/listings", (req, res) => {
-    res.status(200).send("Welcome 🙌 ");
+// Show all listings, which doesn't require auth
+  app.get("/api/listings", async (req, res) => {
+    const listings = await Listing.find({});
+    res.status(200).json(listings);
   });
 
-
-  app.post("/api/addListing", verifyToken, (req, res) => {
-    const{title, squareMeters, price} = req.body
+// Add a new Listing, which is only possible, if token auth successful
+  app.post("/api/addListing", verifyToken, async (req, res) => {
+    const{title, squareMeters, price, city, image, description} = req.body
     if(!(title && squareMeters && price)){
       return res.json({error: "Min title, price and square meters required!"})
     }
-
-    res.status(200).send(req.body);
+    const listing = await Listing.create({
+      title: title,
+      squareMeters : squareMeters,
+      price: price,
+      description:description,
+      city: city,
+      image: image,
+      created: req.user.user_id
+    })
+    return res.status(200).json({created: "true"});
   })
 
 
