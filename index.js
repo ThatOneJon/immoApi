@@ -98,7 +98,7 @@ app.post("/api/login", async (req, res, next) => {
     let {email, password} = req.body
     try{
       if(!(email && password)){
-        return res.send("Email and password required!")
+        return res.json({err:"Email and password required!"})
       }
       email = email.toLowerCase()
       const user = await User.findOne({ email });
@@ -125,7 +125,7 @@ app.post("/api/login", async (req, res, next) => {
       }
 
     }catch(error){
-      res.json({error:error})
+      res.json({err:error})
     }
     return next()
   })
