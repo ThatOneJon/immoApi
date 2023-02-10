@@ -61,13 +61,13 @@ app.get("/api", (req, res) => {
 app.post("/api/register", async (req, res) => {
   const {username, email, password}= req.body
   if(!(username && email && password)){
-    res.send("All input is required");
+    res.json({err:"all input is required!"});
   }
     try{
       email.toLowerCase()
       const userDouble = await User.findOne({ email });
       if(userDouble){
-        return res.status(409).send("User with that mail already exists!")
+        return res.status(409).json({err:"User with that mail already exists!"})
       }
 
     }catch(error){
@@ -121,7 +121,7 @@ app.post("/api/login", async (req, res, next) => {
         .json({ message: "Logged in successfully 😊 👌" });
 
       }else{
-        res.status(400).send("Invalid Credentials");
+        res.status(400).json({err:"Invalid Credentials"});
       }
 
     }catch(error){
@@ -147,7 +147,7 @@ app.post("/api/login", async (req, res, next) => {
   app.post("/api/addListing", verifyToken, async (req, res) => {
     const{title, squareMeters, price, city, image, description} = req.body
     if(!(title && squareMeters && price)){
-      return res.json({error: "Min title, price and square meters required!"})
+      return res.json({err: "Min title, price and square meters required!"})
     }
     const listing = await Listing.create({
       title: title,
