@@ -114,7 +114,7 @@ app.post("/api/login", async (req, res, next) => {
         // set token as cookie 
         return res
         .cookie("access_token", token, {
-          httpOnly: true,
+          httpOnly: false,
           secure: process.env.NODE_ENV === "production",
         })
         .status(200)
