@@ -125,7 +125,7 @@ app.post("/api/login", async (req, res, next) => {
         .cookie("access_token", token, {
           httpOnly: true,
           sameSite: "none",
-          //secure: true
+          secure: true
         })
 
         .status(200)
