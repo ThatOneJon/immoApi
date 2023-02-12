@@ -123,8 +123,8 @@ app.post("/api/login", async (req, res, next) => {
         // set token as cookie 
         return res
         .cookie("access_token", token, {
-          httpOnly: false,
-          SameSite: "None",
+          httpOnly: true,
+          sameSite: "None",
           secure: true
         })
 
