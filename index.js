@@ -145,7 +145,7 @@ app.post("/api/login", async (req, res, next) => {
   app.get("/api/logout", verifyToken, (req, res) => {
     return res
     .clearCookie("access_token", { 
-      path:"immpapi.onrender.com/",
+      path:"/",
       httpOnly: true,
       sameSite: "none",
       secure: true
