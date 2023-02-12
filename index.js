@@ -120,7 +120,9 @@ app.post("/api/login", async (req, res, next) => {
           }
         );
         user.token = token;
-        // set token as cookie 
+        // set token as cookie  
+        //If sameSite is set to none secure hast to be true --> if samesite not set --> Lax ---> issue with api call for token 
+        // ---> this is the way
         return res
         .cookie("access_token", token, {
           httpOnly: true,
@@ -142,7 +144,12 @@ app.post("/api/login", async (req, res, next) => {
 
   app.get("/api/logout", verifyToken, (req, res) => {
     return res
-    .clearCookie("access_token")
+    .clearCookie("access_token", { 
+      path:"immpapi.onrender.com/",
+      httpOnly: true,
+      sameSite: "none",
+      secure: true
+    })
     .status(200)
     .json({ message: "Successfully logged out!" });
   } )
