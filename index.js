@@ -124,7 +124,7 @@ app.post("/api/login", async (req, res, next) => {
         return res
         .cookie("access_token", token, {
           httpOnly: true,
-          sameSite: "strict",
+          sameSite: "none",
           //secure: true
         })
 
