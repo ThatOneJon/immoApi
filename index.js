@@ -135,7 +135,7 @@ app.post("/api/login", async (req, res, next) => {
       }
 
     }catch(error){
-      res.json({err:error})
+      res.json({err:JSON.stringify(error)})
     }
     return next()
   })
