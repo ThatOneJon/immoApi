@@ -18,7 +18,16 @@ require('dotenv').config()
 // ---------------------------------------------------
 const PORT = process.env.PORT || 8000;
 
-app.use(cors());
+// CORS Configuration for the fetch  credentials: 'include', which is necessary to set cookies on the client side
+
+const corsOptions = {
+  origin: ['http://localhost:3000', "https://learning-thatonejon.vercel.app/"],
+  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+  credentials: true
+}
+
+app.use(cors(corsOptions));
+
 app.use(express.json());
 app.use(cookieParser());
 app.use(bodyParser.json());
@@ -114,14 +123,13 @@ app.post("/api/login", async (req, res, next) => {
         // set token as cookie 
         return res
         .cookie("access_token", token, {
-          httpOnly: true,
-          //secure: process.env.NODE_ENV === "production",
-          secure: true,
-
+          httpOnly: false,
+          sameSite:false,
+          //secure: true
         })
+
         .status(200)
         .json({ message: "Logged in successfully 😊 👌" });
-
       }else{
         res.status(400).json({err:"Invalid Credentials"});
       }
