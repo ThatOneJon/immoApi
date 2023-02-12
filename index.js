@@ -135,7 +135,7 @@ app.post("/api/login", async (req, res, next) => {
       }
 
     }catch(error){
-      res.json({err:"Something went wrong!"})
+     return res.json({errCatch:error})
     }
     return next()
   })
