@@ -184,8 +184,10 @@ app.post("/api/login", async (req, res, next) => {
   })
 
 
-  app.get("/api/loginstatus", verifyToken, (req, res) => {
-    return res.json(req.user)
+  app.get("/api/loginstatus", verifyToken, async (req, res) => {
+    const _id = req.user.user_id
+    const user = await User.findOne({_id})
+    return res.json({username:user.username, email:user.email, first_name:user.first_name, last_name:user.last_name})
   })
 
 
