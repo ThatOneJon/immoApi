@@ -40,7 +40,7 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
 const verifyToken = function(req, res, next,){
   const token = req.cookies.access_token;
     if(!token){
-      return res.status(403).send("Auth Token missing ! ")
+      return res.status(403).json({message:"No Token!"})
     }
     try{
       const decode = jwt.verify(token, process.env.TOKEN_KEY)
@@ -183,6 +183,10 @@ app.post("/api/login", async (req, res, next) => {
     res.status(200).send("Welcome 🙌 ");
   })
 
+
+  app.get("/api/loginstatus", verifyToken, (req, res) => {
+    return res.json(req.user)
+  })
 
 
 // SERVER Listening on PORT 8000 node .
