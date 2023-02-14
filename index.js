@@ -187,7 +187,8 @@ app.post("/api/login", async (req, res, next) => {
     const listing = await Listing.findOne({_id})
 
     if(!(listing && user)){
-      return res.json({result:"Not found!",
+      return res.json({
+      result:"Not found!",
       data: req.body,
       users: user,
       listing: listing
@@ -196,12 +197,16 @@ app.post("/api/login", async (req, res, next) => {
 
     if(listing.created === user.id){
       const result = await Listing.deleteOne(listing)
-      return res.json({result:result})
+      return res.json({
+        result:"Success!",
+        data:result})
     }else{
       return res.json({result:"You can ony delete listings set by yourself!"})
     }
   }catch(error){
-    return res.json({"error":error})
+    return res.json({
+      result:"Error!",
+      data:error})
   }
   })
 
