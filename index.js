@@ -178,6 +178,31 @@ app.post("/api/login", async (req, res, next) => {
     return res.status(200).json({created: "true"});
   })
 
+ //------------------------ removing
+
+  app.post("/api/remove", verifyToken, async (req, res) => {
+    const{_id} = req.body
+    try{
+    const user = await User.findOne({id:req.user.user_id})
+    const listing = await Listing.findOne({_id})
+
+    if(!(listing && user)){
+      return res.json({result:"Not found!"})
+    }
+
+    if(listing.created === user.id){
+      const result = await Listing.deleteOne(listing)
+      return res.json({result:result})
+    }else{
+      return res.json({result:"You can ony delete listings set by yourself!"})
+    }
+  }catch(error){
+    return res.json({"error":error})
+  }
+  })
+
+
+ //----------------------------
 
   app.get("/api/profile/:id", (req, res) => {
     res.status(200).send("Welcome 🙌 ");
