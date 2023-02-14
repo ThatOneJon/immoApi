@@ -188,7 +188,9 @@ app.post("/api/login", async (req, res, next) => {
 
     if(!(listing && user)){
       return res.json({result:"Not found!",
-    data: req.body
+      data: req.body,
+      users: user,
+      listing: listing
     })
     }
 
