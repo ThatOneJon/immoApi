@@ -187,7 +187,9 @@ app.post("/api/login", async (req, res, next) => {
     const listing = await Listing.findOne({_id})
 
     if(!(listing && user)){
-      return res.json({result:"Not found!"})
+      return res.json({result:"Not found!",
+    data: req.body
+    })
     }
 
     if(listing.created === user.id){
